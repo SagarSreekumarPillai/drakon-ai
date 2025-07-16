@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+typer
+transformers
+scikit-learn
+xgboost
+spacy
+pydantic
+pdfplumber
+PyMuPDF
+llama-cpp-python
