@@ -1,8 +1,17 @@
 import subprocess
 from pathlib import Path
 
-def run_llama_cpp(prompt: str, model_path: str) -> str:
-    llama_exec = Path("./llama.cpp/main")  # Adjust as needed
-    command = [str(llama_exec), "-m", model_path, "-p", prompt]
+def run_local_llm(prompt: str, model_path: Path, llama_binary: Path) -> str:
+    command = [
+        str(llama_binary),
+        "-m", str(model_path),
+        "-p", prompt,
+        "-n", "128"  # number of tokens to generate
+    ]
+
     result = subprocess.run(command, capture_output=True, text=True)
-    return result.stdout
+
+    if result.returncode != 0:
+        return f"[ERROR] {result.stderr.strip()}"
+
+    return result.stdout.strip()
