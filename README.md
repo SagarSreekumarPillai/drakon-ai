@@ -1,4 +1,4 @@
-<h1 align="center">🧠 Drakon AI</h1>
+<h1 align="center">Drakon AI</h1>
 
 <p align="center">
   <strong>Modular, offline-first AI engine powering the Drakon MVP suite</strong><br>
