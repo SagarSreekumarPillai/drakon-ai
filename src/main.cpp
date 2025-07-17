@@ -1,36 +1,38 @@
-#include "drakon.h"
-#include "tokenizer.h"
-#include "model_loader.h"
-#include "backend.h"
+// src/main.cpp
 
+#include "drakon.h"
 #include <iostream>
-#include <fstream>
+#include <vector>
+#include <string>
+
+std::vector<int> tokenize(const std::string& prompt) {
+    std::cout << "[✂️] Tokenizing prompt..." << std::endl;
+    std::vector<int> tokens;
+    for (char c : prompt) {
+        tokens.push_back(static_cast<int>(c));
+    }
+    std::cout << "[📦] Tokenizer initialized." << std::endl;
+    std::cout << "[🔢] Encoded " << tokens.size() << " tokens." << std::endl;
+    return tokens;
+}
 
 int main(int argc, char** argv) {
     if (argc < 3) {
-        std::cerr << "Usage: drakon <model-path> <prompt>\n";
+        std::cerr << "Usage: " << argv[0] << " <model-path> <prompt>" << std::endl;
         return 1;
     }
 
     std::string model_path = argv[1];
     std::string prompt = argv[2];
 
-    // Step 1: Load the model
-    std::cout << "[🔍] Loading model from: " << model_path << std::endl;
     DrakonModel model(model_path);
+    std::vector<int> tokens = tokenize(prompt);
 
-    // Step 2: Tokenize input
-    std::cout << "[✂️] Tokenizing prompt...\n";
-    Tokenizer tokenizer;
-    std::vector<int> tokens = tokenizer.encode(prompt);
-
-    // Step 3: Run inference (simplified loop)
-    std::cout << "[⚙️] Running inference...\n";
+    std::cout << "[⚙️] Running inference..." << std::endl;
     for (int token : tokens) {
-        float prediction = model.forward(token);  // placeholder
-        std::cout << "[📤] Predicted value (mock): " << prediction << std::endl;
+        model.forward(token);
     }
 
-    std::cout << "[✅] Done.\n";
+    std::cout << "[✅] Done." << std::endl;
     return 0;
 }

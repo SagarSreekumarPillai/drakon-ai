@@ -1,21 +1,19 @@
-// Path: include/model_loader.h
+// include/model_loader.h
 
-#ifndef DRAKON_MODEL_LOADER_H
-#define DRAKON_MODEL_LOADER_H
+#ifndef MODEL_LOADER_H
+#define MODEL_LOADER_H
 
 #include <string>
 #include <vector>
 
-class ModelLoader {
-public:
-    explicit ModelLoader(const std::string& path);
-
-    void load();
-    std::vector<float> forward(const std::vector<int>& input_tokens);
-
-private:
-    std::string model_path;
-    // Add other internal state as needed
+struct DrakonWeights {
+    // For now, use a dummy vector of floats. Expand later.
+    std::vector<float> mock_weights;
 };
 
-#endif // DRAKON_MODEL_LOADER_H
+class ModelLoader {
+public:
+    static DrakonWeights load(const std::string& path);
+};
+
+#endif // MODEL_LOADER_H

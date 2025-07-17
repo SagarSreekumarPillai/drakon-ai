@@ -1,18 +1,18 @@
-// Path: include/backend.h
+// include/backend.h
 
-#ifndef DRAKON_BACKEND_H
-#define DRAKON_BACKEND_H
+#ifndef BACKEND_H
+#define BACKEND_H
 
 #include <vector>
 
-class Backend {
+class DrakonBackend {
 public:
-    Backend();
-    void run(const std::vector<float>& input);
-    std::vector<float> get_output();
+    DrakonBackend(const std::vector<float>& weights);
+
+    float forward(int token);
 
 private:
-    std::vector<float> output_data;
+    std::vector<float> weights_;
 };
 
-#endif // DRAKON_BACKEND_H
+#endif // BACKEND_H
