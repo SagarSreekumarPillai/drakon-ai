@@ -14,3 +14,12 @@
 - Updated `drakon.h` to declare `DrakonModel` and `DrakonWeights`.
 - Reconfirmed `CMakeLists.txt` includes the new source file.
 - Build is expected to pass after this fix.
+
+## 2025-08-11 16:55:10
+- Fixed compilation errors:
+  - Resolved `DrakonWeights` redefinition by removing duplicate from `drakon.h` and including `model_loader.h`
+  - Added missing `main.cpp` and `drakon_model.cpp` to main executable in `CMakeLists.txt`
+  - Fixed linker errors for both `drakon` and `test_tensor_ops` targets
+- Build now completes successfully
+- Tested executable with dummy model and prompt - works correctly
+- CLI shows proper logging: model loading, tokenization, and inference steps

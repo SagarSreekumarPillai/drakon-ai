@@ -12,7 +12,9 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # === Source files for main drakon CLI ===
 add_executable(drakon
+    src/main.cpp
     src/drakon_cli.cpp
+    src/drakon_model.cpp
     src/tensor.cpp
     src/ops.cpp
     src/tokenizer.cpp
@@ -26,9 +28,13 @@ endif()
 
 # === Test binary for tensor/ops ===
 add_executable(test_tensor_ops
-    src/test_tensor_ops.cpp
+    src/main.cpp
+    src/drakon_cli.cpp
     src/tensor.cpp
     src/ops.cpp
+    src/tokenizer.cpp
+    src/model_loader.cpp
+    src/drakon_model.cpp 
 )
 target_include_directories(test_tensor_ops PRIVATE ${PROJECT_SOURCE_DIR}/include)
 

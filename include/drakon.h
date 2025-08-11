@@ -4,6 +4,7 @@
 #define DRAKON_H
 
 #include <string>
+#include "model_loader.h"
 
 class DrakonModel {
 public:
@@ -12,6 +13,7 @@ public:
     float forward(int token);
 
 private:
+    DrakonWeights weights;
     class DrakonBackend* backend_;
 };
 
