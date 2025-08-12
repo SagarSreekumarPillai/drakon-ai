@@ -1,27 +1,30 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <random>
 
 int main(int argc, char** argv) {
-    if (argc < 2) {
-        std::cerr << "Usage: generate_dummy_weights <output_file>\n";
+    if (argc < 4) {
+        std::cerr << "Usage: " << argv[0] << " <output_path> <rows> <cols>\n";
         return 1;
     }
 
-    std::string filename = argv[1];
-    std::vector<float> weights = {1.1f, 2.2f, 3.3f, 4.4f}; // test values
+    std::string out_path = argv[1];
+    int rows = std::stoi(argv[2]);
+    int cols = std::stoi(argv[3]);
+    int total = rows * cols;
 
-    std::ofstream out(filename, std::ios::binary);
-    if (!out) {
-        std::cerr << "Error opening file for writing: " << filename << "\n";
-        return 1;
+    std::vector<float> weights(total);
+    std::mt19937 rng(std::random_device{}());
+    std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
+
+    for (float &w : weights) {
+        w = dist(rng);
     }
 
-    out.write(reinterpret_cast<const char*>(weights.data()),
-              weights.size() * sizeof(float));
+    std::ofstream out(out_path, std::ios::binary);
+    out.write(reinterpret_cast<const char*>(weights.data()), total * sizeof(float));
 
-    out.close();
-    std::cout << "[💾] Wrote " << weights.size()
-              << " dummy weights to " << filename << "\n";
+    std::cout << "[💾] Wrote " << total << " random weights to " << out_path << "\n";
     return 0;
 }
