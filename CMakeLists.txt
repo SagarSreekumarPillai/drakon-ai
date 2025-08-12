@@ -41,3 +41,8 @@ target_include_directories(test_tensor_ops PRIVATE ${PROJECT_SOURCE_DIR}/include
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
     target_compile_options(test_tensor_ops PRIVATE -Wall -Wextra -Wpedantic)
 endif()
+
+# === Tool: generate_dummy_weights ===
+add_executable(generate_dummy_weights
+    src/generate_dummy_weights.cpp
+)
