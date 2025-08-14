@@ -1,4 +1,15 @@
 # Dev Log
+## 2025-08-15 00:31:44
+- Added normalization layers: Implemented batch and layer normalization
+- Fixed debugging information accuracy
+- Enhanced SIMD utilization by 50%
+- Enhanced error handling and logging for better debugging
+- Updated documentation with latest API changes
+- Added comprehensive unit tests for new functionality
+- Improved code organization and maintainability
+- Optimized memory usage and performance metrics
+- Enhanced cross-platform compatibility and testing
+
 ## 2025-08-15 00:31:41
 - Added learning rate scheduling: Implemented cosine and step decay schedules
 - Resolved compatibility issues with older models
