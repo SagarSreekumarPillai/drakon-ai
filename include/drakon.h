@@ -1,20 +1,19 @@
-// include/drakon.h
-
 #ifndef DRAKON_H
 #define DRAKON_H
 
 #include <string>
+#include <vector>
 #include "model_loader.h"
 
 class DrakonModel {
 public:
-    DrakonModel(const std::string& model_path);
+    explicit DrakonModel(const std::string& model_path);
 
-    float forward(int token);
+    // Forward pass: Dense + Softmax
+    std::vector<float> forward(int token);
 
 private:
     DrakonWeights weights;
-    class DrakonBackend* backend_;
 };
 
-#endif // DRAKON_H
+#endif

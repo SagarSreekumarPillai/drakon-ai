@@ -1,6 +1,22 @@
 #include "drakon.h"
-#include "model_loader.h"
+#include <cmath>
+#include <vector>
 #include <iostream>
+#include <algorithm>
+
+static std::vector<float> softmax(const std::vector<float>& logits) {
+    std::vector<float> exps(logits.size());
+    float max_logit = *std::max_element(logits.begin(), logits.end());
+    float sum = 0.0f;
+    for (size_t i = 0; i < logits.size(); i++) {
+        exps[i] = std::exp(logits[i] - max_logit); // stability trick
+        sum += exps[i];
+    }
+    for (size_t i = 0; i < logits.size(); i++) {
+        exps[i] /= sum;
+    }
+    return exps;
+}
 
 DrakonModel::DrakonModel(const std::string& model_path) {
     std::cout << "[🧠] Initializing DrakonModel with path: " << model_path << std::endl;
@@ -8,16 +24,14 @@ DrakonModel::DrakonModel(const std::string& model_path) {
     weights = loader.load(model_path);
 }
 
-float DrakonModel::forward(int token) {
-    if (weights.mock_weights.empty()) {
-        std::cerr << "[⚠️] No weights loaded — returning 0.\n";
-        return 0.0f;
+std::vector<float> DrakonModel::forward(int token) {
+    // Dense layer: multiply token scalar by each weight
+    std::vector<float> logits;
+    logits.reserve(weights.mock_weights.size());
+    for (float w : weights.mock_weights) {
+        logits.push_back(w * token);
     }
 
-    // Dummy forward pass: weighted sum * token
-    float sum = 0.0f;
-    for (float w : weights.mock_weights) {
-        sum += w;
-    }
-    return sum * token;
+    // Softmax layer
+    return softmax(logits);
 }

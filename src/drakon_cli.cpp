@@ -1,12 +1,10 @@
-#include <iostream>
-#include <string>
 #include "drakon.h"
-#include "drakon_cli.h"
 #include "tokenizer.h"
+#include <iostream>
 
 int run_drakon_cli(int argc, char** argv) {
     if (argc < 3) {
-        std::cerr << "[❌] Usage: drakon <model_path> <prompt>\n";
+        std::cerr << "Usage: " << argv[0] << " <model_path> <prompt>\n";
         return 1;
     }
 
@@ -18,12 +16,17 @@ int run_drakon_cli(int argc, char** argv) {
 
     std::cout << "[✂️] Tokenizing prompt...\n";
     Tokenizer tokenizer;
-    std::vector<int> tokens = tokenizer.encode(prompt);
+    auto tokens = tokenizer.encode(prompt);
+    std::cout << "[🔢] Encoded " << tokens.size() << " tokens.\n";
 
     std::cout << "[⚙️] Running inference...\n";
     for (int token : tokens) {
-        float output = model.forward(token);
-        std::cout << "[🔄] Token " << token << " → Output: " << output << "\n";
+        auto probs = model.forward(token);
+        std::cout << "[🔄] Token " << token << " → Probabilities: ";
+        for (float p : probs) {
+            std::cout << p << " ";
+        }
+        std::cout << "\n";
     }
 
     std::cout << "[✅] Done.\n";

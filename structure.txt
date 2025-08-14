@@ -1,0 +1,70 @@
+.
+├── api
+│   ├── main.py
+│   └── routes
+│       └── module_routes.py
+├── build
+│   ├── bin
+│   │   ├── drakon
+│   │   ├── generate_dummy_weights
+│   │   └── test_tensor_ops
+│   ├── cmake_install.cmake
+│   ├── CMakeCache.txt
+│   ├── CMakeFiles
+│   │   ├── 4.0.3
+│   │   ├── cmake.check_cache
+│   │   ├── CMakeConfigureLog.yaml
+│   │   ├── CMakeDirectoryInformation.cmake
+│   │   ├── drakon.dir
+│   │   ├── generate_dummy_weights.dir
+│   │   ├── InstallScripts.json
+│   │   ├── Makefile.cmake
+│   │   ├── Makefile2
+│   │   ├── pkgRedirects
+│   │   ├── progress.marks
+│   │   ├── TargetDirectories.txt
+│   │   └── test_tensor_ops.dir
+│   ├── dummy_model.bin
+│   └── Makefile
+├── CMakeLists.txt
+├── dev_log.md
+├── include
+│   ├── backend.h
+│   ├── drakon_cli.h
+│   ├── drakon.h
+│   ├── layers
+│   │   ├── linear.h
+│   │   └── mlp.h
+│   ├── model_loader.h
+│   ├── ops.h
+│   ├── tensor_ops.h
+│   ├── tensor.h
+│   └── tokenizer.h
+├── models
+│   ├── dummy.gguf
+│   └── tinyllama.gguf
+├── pyproject.toml
+├── README.md
+├── requirements.txt
+├── scripts
+│   └── download_models.sh
+├── src
+│   ├── backend.cpp
+│   ├── drakon_cli.cpp
+│   ├── drakon_model.cpp
+│   ├── drakon.cpp
+│   ├── generate_dummy_weights.cpp
+│   ├── layers
+│   │   ├── linear.cpp
+│   │   └── mlp.cpp
+│   ├── main.cpp
+│   ├── model_loader.cpp
+│   ├── ops.cpp
+│   ├── tensor_ops.cpp
+│   ├── tensor.cpp
+│   ├── test_tensor_ops.cpp
+│   ├── test_tensor.cpp
+│   └── tokenizer.cpp
+└── structure.txt
+
+17 directories, 51 files
