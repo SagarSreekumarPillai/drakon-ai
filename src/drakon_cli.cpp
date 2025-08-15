@@ -21,12 +21,8 @@ int run_drakon_cli(int argc, char** argv) {
 
     std::cout << "[⚙️] Running inference...\n";
     for (int token : tokens) {
-        auto probs = model.forward(token);
-        std::cout << "[🔄] Token " << token << " → Probabilities: ";
-        for (float p : probs) {
-            std::cout << p << " ";
-        }
-        std::cout << "\n";
+        float prob = model.forward(token);
+        std::cout << "[🔄] Token " << token << " → Probability: " << prob << "\n";
     }
 
     std::cout << "[✅] Done.\n";

@@ -1,21 +1,13 @@
+// drakon-ai/src/drakon_model.cpp
 #include "drakon.h"
-#include <cmath>
-#include <vector>
+#include "model_loader.h"
 #include <iostream>
-#include <algorithm>
+#include <numeric>   // std::accumulate
 
-static std::vector<float> softmax(const std::vector<float>& logits) {
-    std::vector<float> exps(logits.size());
-    float max_logit = *std::max_element(logits.begin(), logits.end());
-    float sum = 0.0f;
-    for (size_t i = 0; i < logits.size(); i++) {
-        exps[i] = std::exp(logits[i] - max_logit); // stability trick
-        sum += exps[i];
-    }
-    for (size_t i = 0; i < logits.size(); i++) {
-        exps[i] /= sum;
-    }
-    return exps;
+// Helper: compute deterministic “score” from weights
+static inline float score_from_weights(const std::vector<float>& w) {
+    // Sum as a simple stand-in for a real forward pass
+    return std::accumulate(w.begin(), w.end(), 0.0f);
 }
 
 DrakonModel::DrakonModel(const std::string& model_path) {
@@ -24,14 +16,38 @@ DrakonModel::DrakonModel(const std::string& model_path) {
     weights = loader.load(model_path);
 }
 
-std::vector<float> DrakonModel::forward(int token) {
-    // Dense layer: multiply token scalar by each weight
-    std::vector<float> logits;
-    logits.reserve(weights.mock_weights.size());
-    for (float w : weights.mock_weights) {
-        logits.push_back(w * token);
+float DrakonModel::forward(int token) {
+    if (use_cache_) {
+        auto it = cache_.find(token);
+        if (it != cache_.end()) return it->second;
     }
 
-    // Softmax layer
-    return softmax(logits);
+    // Dummy computation: (sum(weights) * token)
+    float s = score_from_weights(weights.mock_weights);
+    float out = s * static_cast<float>(token);
+
+    if (use_cache_) cache_[token] = out;
+    return out;
+}
+
+std::vector<float> DrakonModel::forward_batch(const std::vector<int>& tokens) {
+    std::vector<float> outputs;
+    outputs.reserve(tokens.size());
+
+    // Precompute “score”
+    float s = score_from_weights(weights.mock_weights);
+
+    for (int t : tokens) {
+        if (use_cache_) {
+            auto it = cache_.find(t);
+            if (it != cache_.end()) {
+                outputs.push_back(it->second);
+                continue;
+            }
+        }
+        float out = s * static_cast<float>(t);
+        if (use_cache_) cache_[t] = out;
+        outputs.push_back(out);
+    }
+    return outputs;
 }
