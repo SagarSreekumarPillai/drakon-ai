@@ -7,6 +7,8 @@ import json
 import os
 import sys
 import shlex
+import re
+import subprocess
 
 router = APIRouter()
 
@@ -96,3 +98,39 @@ async def ws_inference(ws: WebSocket):
             await ws.send_text(json.dumps({"type": "error", "message": str(e)}))
         finally:
             await ws.close(code=1011)
+
+
+
+class InferRequest(BaseModel):
+    prompt: str
+    model_path: str = "build/dummy_model.bin"  # default demo
+    drakon_bin: str = "build/bin/drakon"       # default binary path
+
+@router.post("/infer")
+def infer(req: InferRequest):
+    # Ensure binary exists
+    if not os.path.exists(req.drakon_bin):
+        raise HTTPException(status_code=500, detail=f"drakon binary not found at {req.drakon_bin}")
+
+    # Build command
+    cmd = f"{shlex.quote(req.drakon_bin)} {shlex.quote(req.model_path)} {shlex.quote(req.prompt)}"
+    try:
+        proc = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=60)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to run subprocess: {e}")
+
+    if proc.returncode != 0:
+        raise HTTPException(status_code=500, detail=f"drakon failed: {proc.stderr or proc.stdout}")
+
+    # Parse outputs of form: "[🔄] Token 9270 → Output: 101970"
+    outputs = []
+    for line in proc.stdout.splitlines():
+        m = re.search(r"Token\s+(\d+)\s+→\s+Output:\s+([-+eE0-9\.]+)", line)
+        if m:
+            outputs.append({"token": int(m.group(1)), "value": float(m.group(2))})
+
+    return {
+        "ok": True,
+        "raw": proc.stdout,
+        "parsed": outputs
+    }
