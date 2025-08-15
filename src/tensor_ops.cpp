@@ -10,9 +10,10 @@ Tensor add(const Tensor& a, const Tensor& b) {
         throw std::runtime_error("Shape mismatch in add()");
     }
 
-    Tensor result(a.rows(), a.cols());
+    std::vector<size_t> shape = {static_cast<size_t>(a.rows()), static_cast<size_t>(a.cols())};
+    Tensor result(shape);
     for (int i = 0; i < a.size(); ++i) {
-        result[i] = a[i] + b[i];
+        result.data()[i] = a.data()[i] + b.data()[i];
     }
     return result;
 }
@@ -22,9 +23,10 @@ Tensor sub(const Tensor& a, const Tensor& b) {
         throw std::runtime_error("Shape mismatch in sub()");
     }
 
-    Tensor result(a.rows(), a.cols());
+    std::vector<size_t> shape = {static_cast<size_t>(a.rows()), static_cast<size_t>(a.cols())};
+    Tensor result(shape);
     for (int i = 0; i < a.size(); ++i) {
-        result[i] = a[i] - b[i];
+        result.data()[i] = a.data()[i] - b.data()[i];
     }
     return result;
 }
@@ -34,9 +36,10 @@ Tensor mul(const Tensor& a, const Tensor& b) {
         throw std::runtime_error("Shape mismatch in mul()");
     }
 
-    Tensor result(a.rows(), a.cols());
+    std::vector<size_t> shape = {static_cast<size_t>(a.rows()), static_cast<size_t>(a.cols())};
+    Tensor result(shape);
     for (int i = 0; i < a.size(); ++i) {
-        result[i] = a[i] * b[i];
+        result.data()[i] = a.data()[i] * b.data()[i];
     }
     return result;
 }
@@ -46,7 +49,8 @@ Tensor matmul(const Tensor& a, const Tensor& b) {
         throw std::runtime_error("Shape mismatch in matmul()");
     }
 
-    Tensor result(a.rows(), b.cols());
+    std::vector<size_t> shape = {static_cast<size_t>(a.rows()), static_cast<size_t>(b.cols())};
+    Tensor result(shape);
     for (int i = 0; i < a.rows(); ++i) {
         for (int j = 0; j < b.cols(); ++j) {
             float sum = 0.0f;
@@ -60,18 +64,20 @@ Tensor matmul(const Tensor& a, const Tensor& b) {
 }
 
 Tensor relu(const Tensor& input) {
-    Tensor result(input.rows(), input.cols());
+    std::vector<size_t> shape = {static_cast<size_t>(input.rows()), static_cast<size_t>(input.cols())};
+    Tensor result(shape);
     for (int i = 0; i < input.size(); ++i) {
-        result[i] = std::max(0.0f, input[i]);
+        result.data()[i] = std::max(0.0f, input.data()[i]);
     }
     return result;
 }
 
 Tensor gelu(const Tensor& input) {
-    Tensor result(input.rows(), input.cols());
+    std::vector<size_t> shape = {static_cast<size_t>(input.rows()), static_cast<size_t>(input.cols())};
+    Tensor result(shape);
     for (int i = 0; i < input.size(); ++i) {
-        float x = input[i];
-        result[i] = 0.5f * x * (1 + std::tanh(std::sqrt(2.0f / M_PI) * (x + 0.044715f * std::pow(x, 3))));
+        float x = input.data()[i];
+        result.data()[i] = 0.5f * x * (1 + std::tanh(std::sqrt(2.0f / M_PI) * (x + 0.044715f * std::pow(x, 3))));
     }
     return result;
 }
