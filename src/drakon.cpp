@@ -7,15 +7,7 @@
 #include <vector>
 #include <string>
 
-DrakonModel::DrakonModel(const std::string& model_path) {
-    std::cout << "[🧠] DrakonModel constructor: loading model from " << model_path << std::endl;
-    DrakonWeights weights = ModelLoader::load(model_path);
-    backend_ = new DrakonBackend(weights.mock_weights);
-}
-
-float DrakonModel::forward(int token) {
-    return backend_->forward(token);
-}
+// Note: DrakonModel implementation is in drakon_model.cpp to avoid duplicate symbols
 
 std::vector<int> tokenize(const std::string& prompt) {
     std::cout << "[✂️] Tokenizing prompt..." << std::endl;
