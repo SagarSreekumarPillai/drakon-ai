@@ -3,16 +3,16 @@
 #include <random>
 
 Linear::Linear(int in_features, int out_features)
-    : weight(out_features, in_features), bias(out_features, 1) {
+    : weight({out_features, in_features}), bias({out_features, 1}) {
 
     std::default_random_engine gen(42);
     std::normal_distribution<float> dist(0.0, 0.02);
 
     for (int i = 0; i < weight.size(); ++i) {
-        weight[i] = dist(gen);
+        weight.data()[i] = dist(gen);
     }
     for (int i = 0; i < bias.size(); ++i) {
-        bias[i] = 0.0f;
+        bias.data()[i] = 0.0f;
     }
 }
 
